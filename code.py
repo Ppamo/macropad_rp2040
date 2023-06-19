@@ -98,32 +98,36 @@ if not apps:
     while True:
         pass
 
+last_encoder_switch_debounced_event = None
+encoder_switch_debounced_event = None
+encoder_switch_debounced_millis = 0
 position = 0
 last_position = 0
-last_encoder_switch = macropad.encoder_switch_debounced.pressed
 app_index = 0
 apps[app_index].switch()
 
 # MAIN LOOP ----------------------------
 
 while True:
-    # Read encoder position. If it's changed, switch apps.
     position = macropad.encoder
     if position != last_position:
         if position < last_position:
             macropad.consumer_control.press(ConsumerControlCode.VOLUME_DECREMENT)
-            group[13].text = 'vol--'
         else:
             macropad.consumer_control.press(ConsumerControlCode.VOLUME_INCREMENT)
-            group[13].text = 'vol++'
         macropad.consumer_control.release()
-        macropad.display.refresh()
         last_position = position
 
     macropad.encoder_switch_debounced.update()
-    encoder_switch_pressed = macropad.encoder_switch_debounced.pressed
-    if encoder_switch_pressed:
-        last_encoder_switch = encoder_switch_pressed
-        app_index += 1
-        app_index = app_index % len(apps)
-        apps[app_index].switch()
+    if macropad.encoder_switch_debounced.pressed:
+        encoder_switch_debounced_event = 'pressed'
+        encoder_switch_debounced_millis = time.time()
+    if macropad.encoder_switch_debounced.released:
+        encoder_switch_debounced_event = 'released'
+        if (time.time() - encoder_switch_debounced_millis) > 1:
+            app_index = 0
+            apps[app_index].switch()
+        else:
+            app_index += 1
+            app_index = app_index % len(apps)
+            apps[app_index].switch()
