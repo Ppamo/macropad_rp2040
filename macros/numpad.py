@@ -5,15 +5,17 @@
 # MACROPAD Hotkeys example: Universal Numpad
 
 from adafruit_hid.keycode import Keycode # REQUIRED if using Keycode.* values
+from adafruit_hid.consumer_control_code import ConsumerControlCode
 
 app = {                # REQUIRED dict, must be named 'app'
     'name' : 'Numpad', # Application name
+    'color': 0x202000,
     'macros' : [       # List of button macros...
         # COLOR    LABEL    KEY SEQUENCE
         # 1st row ----------
-        (0x202000, '7', ['7']),
-        (0x202000, '8', ['8']),
-        (0x202000, '9', ['9']),
+        (-1, '7', ['7']),
+        (-1, '8', ['8']),
+        (-1, '9', ['9']),
         # 2nd row ----------
         (0x202000, '4', ['4']),
         (0x202000, '5', ['5']),
@@ -26,7 +28,9 @@ app = {                # REQUIRED dict, must be named 'app'
         (0x101010, '*', ['*']),
         (0x800000, '0', ['0']),
         (0x101010, '#', ['#']),
-        # Encoder button ---
-        (0x000000, '', [Keycode.BACKSPACE])
+    ],
+    'encoder': [
+        ([[ConsumerControlCode.VOLUME_INCREMENT]]),
+        ([[ConsumerControlCode.VOLUME_DECREMENT]]),
     ]
 }

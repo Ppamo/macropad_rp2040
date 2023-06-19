@@ -15,12 +15,15 @@
 # 'y' w/vertical and 'wheel' with scrollwheel motion.
 
 # To reference Mouse constants, import Mouse like so...
-from adafruit_hid.mouse import Mouse
 # You can still import Keycode and/or ConsumerControl as well if a macro file
 # mixes types! See other macro files for typical Keycode examples.
 
+from adafruit_hid.mouse import Mouse
+from adafruit_hid.consumer_control_code import ConsumerControlCode
+
 app = {               # REQUIRED dict, must be named 'app'
     'name' : 'Mouse', # Application name
+    'color': 0x300020,
     'macros' : [      # List of button macros...
         # COLOR    LABEL    KEY SEQUENCE
         # 1st row ----------
@@ -39,7 +42,9 @@ app = {               # REQUIRED dict, must be named 'app'
         (0x000000, '', []),
         (0x202020, 'Down', [{'y':10}]),
         (0x000000, '', []),
-        # Encoder button ---
-        (0x000000, '', [])
+    ],
+    'encoder': [
+        ([[ConsumerControlCode.VOLUME_INCREMENT]]),
+        ([[ConsumerControlCode.VOLUME_DECREMENT]]),
     ]
 }
