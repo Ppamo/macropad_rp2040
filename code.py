@@ -1,16 +1,3 @@
-# SPDX-FileCopyrightText: 2021 Phillip Burgess for Adafruit Industries
-#
-# SPDX-License-Identifier: MIT
-
-"""
-A macro/hotkey program for Adafruit MACROPAD. Macro setups are stored in the
-/macros folder (configurable below), load up just the ones you're likely to
-use. Plug into computer's USB port, use dial to select an application macro
-set, press MACROPAD keys to send key sequences and other USB protocols.
-"""
-
-# pylint: disable=import-error, unused-import, too-few-public-methods
-
 import os
 import time
 import displayio
@@ -21,12 +8,8 @@ from adafruit_macropad import MacroPad
 from adafruit_hid.consumer_control_code import ConsumerControlCode
 
 
-# CONFIGURABLES ------------------------
-
 MACRO_FOLDER = '/macros'
 
-
-# CLASSES AND FUNCTIONS ----------------
 
 class App:
     """ Class representing a host-side application, for which we have a set
@@ -34,15 +17,26 @@ class App:
         this was helpful, but maybe it's excessive now?"""
     def __init__(self, appdata):
         self.name = appdata['name']
+        self.color = appdata['color']
         self.macros = appdata['macros']
+        self.encoder = appdata['encoder']
+
+    def turnOffLeds(self):
+        """ Turn off all the leds in the macropad """
+        for i in range(12):
+            macropad.pixels[i] = 0
+        macropad.pixels.show()
 
     def switch(self):
         """ Activate application settings; update OLED labels and LED
             colors. """
-        group[13].text = self.name   # Application name
+        group[13].text = self.name
         for i in range(12):
-            if i < len(self.macros): # Key in use, set label + LED color
-                macropad.pixels[i] = self.macros[i][0]
+            if i < len(self.macros):
+                if self.macros[i][0] ==  -1:
+                    macropad.pixels[i] = self.color
+                else:
+                    macropad.pixels[i] = self.macros[i][0]
                 group[i].text = self.macros[i][1]
             else:  # Key not in use, no label or LED
                 macropad.pixels[i] = 0
@@ -54,8 +48,6 @@ class App:
         macropad.pixels.show()
         macropad.display.refresh()
 
-
-# INITIALIZATION -----------------------
 
 macropad = MacroPad()
 macropad.display.auto_refresh = False
@@ -84,6 +76,7 @@ files.sort()
 for filename in files:
     if filename.endswith('.py') and not filename.startswith('._'):
         try:
+            print("Loading", filename)
             module = __import__(MACRO_FOLDER + '/' + filename[:-3])
             apps.append(App(module.app))
         except (SyntaxError, ImportError, AttributeError, KeyError, NameError,
@@ -100,15 +93,18 @@ if not apps:
 
 last_encoder_switch_debounced_event = None
 encoder_switch_debounced_event = None
+encoder_switch_press_released = 0
 encoder_switch_debounced_millis = 0
 position = 0
 last_position = 0
+
 app_index = 0
 apps[app_index].switch()
 
 # MAIN LOOP ----------------------------
 
 while True:
+    # Handle encoder changes
     position = macropad.encoder
     if position != last_position:
         if position < last_position:
@@ -118,16 +114,22 @@ while True:
         macropad.consumer_control.release()
         last_position = position
 
+    # Handle encoder press changes
     macropad.encoder_switch_debounced.update()
+    if encoder_switch_debounced_event == 'pressed':
+        if (time.time() - encoder_switch_debounced_millis) > 1:
+            encoder_switch_press_released = 1
+            apps[app_index].turnOffLeds()
+
     if macropad.encoder_switch_debounced.pressed:
         encoder_switch_debounced_event = 'pressed'
         encoder_switch_debounced_millis = time.time()
     if macropad.encoder_switch_debounced.released:
         encoder_switch_debounced_event = 'released'
-        if (time.time() - encoder_switch_debounced_millis) > 1:
+        if encoder_switch_press_released == 1:
+            encoder_switch_press_released = 0
             app_index = 0
-            apps[app_index].switch()
         else:
             app_index += 1
-            app_index = app_index % len(apps)
-            apps[app_index].switch()
+        app_index = app_index % len(apps)
+        apps[app_index].switch()
