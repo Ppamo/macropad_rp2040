@@ -13,31 +13,32 @@
 # Like Keycodes, Consumer Control codes can be positive (press) or negative
 # (release), and float values can be inserted for pauses.
 
+from adafruit_hid.keycode import Keycode
 from adafruit_hid.consumer_control_code import ConsumerControlCode
 
 app = {
     'name' : 'Win',
-    'color': 0x400000,
+    'color': 0x040404,
     'macros' : [
-        # 1st row ----------
+        # --
+        (0x080008, '>||', [[ConsumerControlCode.PLAY_PAUSE]]),
+        (0x080008, '<<', [[ConsumerControlCode.SCAN_PREVIOUS_TRACK]]),
+        (0x080008, '>>', [[ConsumerControlCode.SCAN_NEXT_TRACK]]),
+        # --
         (-1, '', []),
-        (0x202000, 'Vol+', [[ConsumerControlCode.VOLUME_INCREMENT]]),
-        (-1, 'Bright+', [[ConsumerControlCode.BRIGHTNESS_INCREMENT]]),
-        # 2nd row ----------
         (-1, '', []),
-        (0x202000, 'Vol-', [[ConsumerControlCode.VOLUME_DECREMENT]]),
-        (-1, 'Bright-', [[ConsumerControlCode.BRIGHTNESS_DECREMENT]]),
-        # 3rd row ----------
-        (-1, '', []),
-        (-1, 'Mute', [[ConsumerControlCode.MUTE]]),
-        (-1, '', []),
-        # 4th row ----------
-        (-1, '<<', [[ConsumerControlCode.SCAN_PREVIOUS_TRACK]]),
-        (-1, 'Play/Pause', [[ConsumerControlCode.PLAY_PAUSE]]),
-        (-1, '>>', [[ConsumerControlCode.SCAN_NEXT_TRACK]]),
+        (0x080008, 'Mute', [[ConsumerControlCode.MUTE]]),
+        # --
+        (0x000408, '//\\\\', [Keycode.PAGE_UP]),
+        (0x000008, '/\\', [Keycode.UP_ARROW]),
+        (0x000408, '\\\\//', [Keycode.PAGE_DOWN]),
+        # --
+        (0x000008, '<', [Keycode.LEFT_ARROW]),
+        (0x000008, '\\/', [Keycode.DOWN_ARROW]),
+        (0x000008, '>', [Keycode.RIGHT_ARROW]),
     ],
     'encoder': [
-        ([[ConsumerControlCode.VOLUME_INCREMENT]]),
-        ([[ConsumerControlCode.VOLUME_DECREMENT]]),
+        ConsumerControlCode.VOLUME_DECREMENT,
+        ConsumerControlCode.VOLUME_INCREMENT,
     ]
 }
