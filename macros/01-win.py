@@ -25,8 +25,8 @@ app = {
         (0x080008, '<<', [[ConsumerControlCode.SCAN_PREVIOUS_TRACK]]),
         (0x080008, '>>', [[ConsumerControlCode.SCAN_NEXT_TRACK]]),
         # --
-        (-1, '', []),
-        (-1, '', []),
+        (0x080600, '^C', [Keycode.CONTROL, Keycode.C]),
+        (0x080600, '^V', [Keycode.CONTROL, Keycode.V]),
         (0x080008, 'Mute', [[ConsumerControlCode.MUTE]]),
         # --
         (0x000408, '//\\\\', [Keycode.PAGE_UP]),
