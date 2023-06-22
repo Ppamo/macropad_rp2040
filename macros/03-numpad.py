@@ -30,7 +30,7 @@ app = {                # REQUIRED dict, must be named 'app'
         (0x101010, '#', ['#']),
     ],
     'encoder': [
-        ([[ConsumerControlCode.VOLUME_INCREMENT]]),
-        ([[ConsumerControlCode.VOLUME_DECREMENT]]),
+        ConsumerControlCode.VOLUME_DECREMENT,
+        ConsumerControlCode.VOLUME_INCREMENT,
     ]
 }
