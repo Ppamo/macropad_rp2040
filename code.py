@@ -193,7 +193,6 @@ while True:
     # Handle encoder press changes
     macropad.encoder_switch_debounced.update()
     if encoder_switch_debounced_event == 'pressed':
-        print('Encoder button pressed')
         if (time.time() - encoder_switch_debounced_millis) > 1:
             print('Encoder long button pressed')
             encoder_switch_press_released = 1
