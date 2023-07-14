@@ -17,7 +17,7 @@ from adafruit_hid.keycode import Keycode
 from adafruit_hid.consumer_control_code import ConsumerControlCode
 
 app = {
-    'name' : 'Diablo 4',
+    'name' : 'Diablo 3',
     'color': 0x040404,
     'macros' : [
         # --
@@ -27,14 +27,14 @@ app = {
         # --
         (0x040000, ' .: ', ['3']),
         (0x000008, ' -- ', ['I']),
-        (0x000600, '  ] ', [Keycode.SPACEBAR]),
+        (0x000600, '  ] ', ['T']),
         # --
         (0x040000, '  : ', ['2']),
         (0x000008, ' <> ', [Keycode.TAB]),
         (0x000600, ' << ', ['Z']),
         # --
         (0x040000, '  . ', ['1']),
-        (0x090700, '  + ', [Keycode.LEFT_ALT]),
+        (0x090700, '  + ', [Keycode.ENTER]),
         (0x080008, ' ++ ', ['Q']),
     ],
     'encoder': [
