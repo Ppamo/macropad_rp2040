@@ -16,13 +16,14 @@
 from adafruit_hid.keycode import Keycode
 from adafruit_hid.consumer_control_code import ConsumerControlCode
 
+# Tattle9@4Celibate@2Theme
 app = {
     'name' : 'Mac',
     'color': 0x040404,
     'macros' : [
         (0x080008, '>||', [[ConsumerControlCode.PLAY_PAUSE]]),
-        (0x000008, 'o', ['pamnsilla']),
-        (0x000008, 'x', ['Agonizing',Keycode.ALT,Keycode.Q,'P',Keycode.BACKSPACE,'Pedicure8',Keycode.ALT,Keycode.Q,'S','Splashed123']),
+        (0x000008, 'o', ['pmansilla']),
+        (0x000008, 'x', ['Tattle9',Keycode.ALT,Keycode.Q,'4',Keycode.BACKSPACE,'4Celibate',Keycode.ALT,Keycode.Q,'2',Keycode.BACKSPACE,'2Theme']),
         # --
         (0x080600, '^Z', [Keycode.COMMAND, Keycode.Z]),
         (0x000408, '\\\\//', [Keycode.PAGE_DOWN]),
