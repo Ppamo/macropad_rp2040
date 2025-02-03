@@ -223,7 +223,7 @@ while True:
 
         pressed = event.pressed
         if pressed:
-            print('pressed')
+            print('> pressed')
             last_button_pressed = pressed
             pressed_button(apps[app_index], event)
 
